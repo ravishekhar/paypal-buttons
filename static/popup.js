@@ -1,3 +1,5 @@
+const button = document.querySelector("#open-paypal-com");
+
 const url = "https://www.paypal.com"
 function open() {
     if (window.popupBridge) {
@@ -8,10 +10,13 @@ function open() {
         popupBridge.onComplete = function (err, payload) {
             if (err) {
                 console.error('PopupBridge onComplete Error:', err);
+                button.textContent = `Error ... `;
             } else if (!err && !payload) {
                 console.log('User closed popup.');
+                button.textContent = `User Closed  ... `;
             } else {
                 console.log("Done, onComplete", payload);
+                button.textContent = `Completed ... `;
             }
         };
     } else {
@@ -23,8 +28,8 @@ function open() {
     }
 }
 
-const button = document.querySelector("#open-paypal-com");
 
 button.addEventListener("click", (event) => {
-    button.textContent = `Click count: ${event.detail}`;
+    button.textContent = `Clicked ... `;
+    open();
 });
