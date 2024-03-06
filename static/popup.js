@@ -1,7 +1,7 @@
 const button = document.querySelector("#open-paypal-com");
 
 const url = "https://ravishekhar.github.io/paypal-buttons/static/iframe.html"
-function open() {
+function openPopup() {
     if (window.popupBridge) {
         // Open the popup in a browser, and give it the deep link back to the app
         popupBridge.open(url + '?popupBridgeReturnUrlPrefix=' + popupBridge.getReturnUrlPrefix());
@@ -31,5 +31,5 @@ function open() {
 
 button.addEventListener("click", (event) => {
     button.textContent = `Clicked ... `;
-    open();
+    openPopup();
 });
