@@ -1,6 +1,6 @@
 const button = document.querySelector("#open-paypal-com");
 
-const url = "https://www.paypal.com"
+const url = "https://ravishekhar.github.io/paypal-buttons/static"
 function open() {
     if (window.popupBridge) {
         // Open the popup in a browser, and give it the deep link back to the app
