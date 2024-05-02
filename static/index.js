@@ -22,7 +22,7 @@ const buttonOptions = {
                 purchase_units: [
                     {
                         amount: {
-                            value: 2.0,
+                            value: 0.05,
                         },
                     },
                 ],
@@ -37,15 +37,15 @@ const buttonOptions = {
         const outputElement = document.querySelector("#output");
 
         return actions.order
-            .capture()
+            .get()
             .then((orderDetails) => {
                 console.log({ orderDetails });
                 outputElement.innerHTML =
-                    "<h3>Thank you for your payment!</h3>";
+                    "<h3>Thank you for approving the payment. There is no payment capture. If there is a temp hold on card, that should get reverted. </h3>";
             })
             .catch((err) => {
                 console.error(err);
-                outputElement.innerHTML = `<h3>The capture failed. \n ${err.toString()}</h3>`;
+                outputElement.innerHTML = `<h3>The get details failed. \n ${err.toString()}</h3>`;
             });
     },
 };
