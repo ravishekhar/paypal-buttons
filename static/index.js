@@ -3,8 +3,9 @@ import { getOptionsFromQueryString, setPerformanceMark } from "./utils.js";
 
 const sdkScriptDefaultOptions = {
     "client-id": "test",
-    cachebust: "calzone",
+    debug: "true",
 };
+const outputElement = document.querySelector("#output");
 
 const sdkScriptOptionsFromQueryString = getOptionsFromQueryString();
 const sdkScriptOptions = Object.keys(sdkScriptOptionsFromQueryString).length
@@ -29,12 +30,13 @@ const buttonOptions = {
             })
             .then((orderID) => {
                 console.log({ orderID });
+                outputElement.innerHTML = `<pre>orderId = ${orderID}</pre>`
                 return orderID;
             });
     },
 
     onApprove(data, actions) {
-        const outputElement = document.querySelector("#output");
+
 
         return actions.order
             .get()
@@ -42,6 +44,7 @@ const buttonOptions = {
                 console.log({ orderDetails });
                 outputElement.innerHTML =
                     "<h3>Thank you for approving the payment. There is no payment capture. If there is a temp hold on card, that should get reverted. </h3>";
+                outputElement.innerHTML += `<pre>orderId = ${data.orderID} status: ${orderDetails.status}</pre>`
             })
             .catch((err) => {
                 console.error(err);
