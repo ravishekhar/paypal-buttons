@@ -52,7 +52,7 @@ export function renderButtons({showShippingChange, redirectOnApproval} = {}) {
                     outputElement.innerHTML += `<pre>orderId = ${data.orderID} status: ${orderDetails.status}</pre>`;
 
                     if (redirectOnApproval) {
-                        actions.redirect(`https://ravishekhar.github.io/paypal-buttons/static/thankyou.html?orderID=${data.orderID}`)
+                        actions.redirect(`https://ravishekhar.github.io/paypal-buttons/static/thankyou?orderID=${data.orderID}`)
                     }
                 })
                 .catch((err) => {
