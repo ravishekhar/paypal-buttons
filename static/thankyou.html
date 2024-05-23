@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Thank You</title>
+</head>
+<body>
+
+<h1>Thank you for approving the payment</h1>
+<h1>There is no payment capture. If there is a temp hold on card, that should get reverted.</h1>
+<h2>Order ID = <span id="orderID"></span></h2>
+<script>
+    const searchParams = new URLSearchParams(window.location.search);
+    document.getElementById('orderID').innerText = searchParams.get('orderID');
+
+</script>
+
+</body>
+</html>
