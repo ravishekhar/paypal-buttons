@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Iframe</title>
+    <style>
+        body {
+            background: lightcyan;
+        }
+    </style>
+</head>
+<body>
+<h3>Iframe</h3>
+
+<script>
+
+    window.addEventListener(
+        "message",
+        (event) => {
+            console.log('Message received by Iframe, redirecting....', event)
+            window.top.location= "https://ravishekhar.github.io/paypal-buttons/static/redirection-test/redirect-page.html"
+        },
+        false,
+    );
+</script>
+
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Parent</title>
+    <style>
+        body {
+            background: lightsalmon;
+        }
+    </style>
+</head>
+<body>
+<iframe src="iframe.html" id="myframe"></iframe>
+<button id="redirect-from-parent">Redirect from Parent Page</button>
+<button id="redirect-from-iframe">Redirect from Iframe</button>
+
+<script>
+
+    document.getElementById("redirect-from-parent").addEventListener("click", function () {
+        console.log("Clicked on Redirect from Parent")
+        window.top.location = "https://ravishekhar.github.io/paypal-buttons/static/redirection-test/redirect-page.html"
+    });
+
+    const iframe = document.getElementById("myframe")
+    document.getElementById("redirect-from-iframe").addEventListener("click", function () {
+        console.log("Clicked on Redirect from Iframe Button")
+        iframe.contentWindow.postMessage("redirect the window")
+    });
+
+
+</script>
+
+</body>
+</html>
