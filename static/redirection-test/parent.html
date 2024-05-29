@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <meta charset="UTF-8">
     <title>Parent</title>
     <style>
@@ -10,10 +11,15 @@
     </style>
 </head>
 <body>
+<h1>Iframe from Same Domain</h1>
 <iframe src="iframe.html" id="myframe"></iframe>
 <button id="redirect-from-parent">Redirect from Parent Page</button>
 <button id="redirect-from-iframe">Redirect from Iframe</button>
-
+<hr/>
+<h1>Cross Domain Iframe</h1>
+<iframe src="https://shipping-change-test-6d457e3bc42c.herokuapp.com/static/redirection-test/iframe.html"
+        id="xdmframe"></iframe>
+<button id="redirect-from-xdm-iframe">Redirect from Cross Domain Iframe</button>
 <script>
 
     document.getElementById("redirect-from-parent").addEventListener("click", function () {
@@ -22,8 +28,13 @@
     });
 
     const iframe = document.getElementById("myframe")
+    const xdmframe = document.getElementById("xdmframe")
     document.getElementById("redirect-from-iframe").addEventListener("click", function () {
         console.log("Clicked on Redirect from Iframe Button")
+        iframe.contentWindow.postMessage("redirect the window")
+    });
+    document.getElementById("redirect-from-xdm-iframe").addEventListener("click", function () {
+        console.log("Clicked on Redirect from XDM Iframe Button")
         iframe.contentWindow.postMessage("redirect the window")
     });
 
