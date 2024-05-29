@@ -19,7 +19,7 @@
 <h1>Cross Domain Iframe</h1>
 <iframe src="https://shipping-change-test-6d457e3bc42c.herokuapp.com/static/redirection-test/iframe.html"
         id="xdmframe"></iframe>
-<button id="redirect-from-xdm-iframe">Redirect from Cross Domain Iframe</button>
+<button id="redirect-from-xdm-iframe">Redirect from Cross Domain Iframe after 5 seconds of click</button>
 <script>
 
     document.getElementById("redirect-from-parent").addEventListener("click", function () {
@@ -35,7 +35,10 @@
     });
     document.getElementById("redirect-from-xdm-iframe").addEventListener("click", function () {
         console.log("Clicked on Redirect from XDM Iframe Button")
-        xdmframe.contentWindow.postMessage("redirect the window", "*")
+        setTimeout(() => {
+            xdmframe.contentWindow.postMessage("redirect the window", "*")
+        }, 5000)
+
     });
 
 
