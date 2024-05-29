@@ -35,7 +35,7 @@
     });
     document.getElementById("redirect-from-xdm-iframe").addEventListener("click", function () {
         console.log("Clicked on Redirect from XDM Iframe Button")
-        iframe.contentWindow.postMessage("redirect the window")
+        xdmframe.contentWindow.postMessage("redirect the window", "*")
     });
 
 
