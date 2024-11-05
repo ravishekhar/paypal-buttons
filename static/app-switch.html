@@ -1,25 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>PayPal JS SDK Buttons Test Page</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>TestPage</title>
 
 </head>
 
 <h1>App Switch Testing</h1>
 
 
-
 <script type="module">
-    var button1 = document.createElement("button"); 
-button1.innerHTML = "Click Me To Do An App Switch"; 
-document.body.appendChild(button1);
+    var button1 = document.createElement("button");
+    var button2 = document.createElement("button");
+    button1.innerHTML = "Click Me To Do An App Switch via Redirect";
+    document.body.appendChild(button1);
 
-button1.onclick = function() {
-	
-	location.href="https://app-switch-mobile-integration-4e4c9cddcde5.herokuapp.com/onsuccess"
-}
+    button1.onclick = function () {
+
+        location.href = "https://www.paypal.com/myaccount/wallet";
+    }
+
+
+    button2.innerHTML = "Click Me To Do An App Switch via window open";
+    document.body.appendChild(button2);
+
+    button2.onclick = function () {
+
+        window.open("https://www.paypal.com/myaccount/wallet");
+    }
 </script>
 </body>
 </html>
