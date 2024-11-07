@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>TestPage</title>
+
+</head>
+
+<h1>App Switch Testing</h1>
+<p>Introduce Delay (ms)<input type="number" id="delay" value="0"></p>
+<p>
+    <button id="button1">Click Me To Do An App Switch via Redirect</button>
+</p>
+<p>
+    <button id="button2">Click Me To Do An App Switch via window open</button>
+</p>
+
+
+<script type="module">
+    const button1 = document.getElementById("button1");
+    const button2 = document.getElementById("button2");
+    const delay = document.getElementById("delay");
+
+    button1.onclick = function () {
+        setTimeout(() => {
+            location.href = "https://www.facebook.com";
+        }, +delay.value);
+    }
+
+
+    button2.onclick = function () {
+        setTimeout(() => {
+            window.open("https://www.facebook.com");
+        }, +delay.value);
+
+    }
+</script>
+</body>
+</html>
