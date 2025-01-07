@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <!-- Load the client component. -->
+    <script src="https://js.braintreegateway.com/web/3.85.3/js/client.min.js"></script>
+
+    <!-- Load the PayPal Checkout component. -->
+    <script src="https://js.braintreegateway.com/web/3.85.3/js/paypal-checkout.js"></script>
+</head>
+<body>
+
+<h1>Braintree - Sandbox</h1>
+
+<style>
+    button {
+        height: 40px;
+        width: 128px;
+        margin: 2px;
+        border-radius: 4px
+    }
+
+    .side {
+        display: inline-block;
+    }
+
+    .display-messages {
+        border: 1px solid orange;
+        background: lightgoldenrodyellow;
+        margin: 10px;
+    }
+</style>
+
+<div id="display-messages" class="display-messages">
+    <ul>
+        <li>Messages goes here</li>
+    </ul>
+
+</div>
+
+<div id="paypal-button"></div>
+
+<script>
+    // Create a client.
+    braintree.client.create({
+        authorization: 'sandbox_4xtf4gm6_w3438mkfkwh5vfm6'
+    }).then(function (clientInstance) {
+        // Create a PayPal Checkout component.
+        return braintree.paypalCheckout.create({
+            client: clientInstance
+        });
+    }).then(function (paypalCheckoutInstance) {
+        return paypalCheckoutInstance.loadPayPalSDK({
+            currency: 'USD',
+            intent: 'capture',
+            vault: true,
+            locale: 'fr_FR',
+        });
+    }).then(function (paypalCheckoutInstance) {
+        return paypal.Buttons({
+
+            style: {
+                label: 'checkout'
+            },
+
+            createOrder: function () {
+                return paypalCheckoutInstance.createPayment({
+                    flow: 'checkout', // Required
+                    amount: 10.00, // Required
+                    currency: 'USD', // Required, must match the currency passed in with loadPayPalSDK
+                    locale: 'fr-FR',
+                    billingAgreementDetails: {
+                        description: 'Description of the billng agreement to display to the customer'
+                    },
+
+                    intent: 'capture', // Must match the intent passed in with loadPayPalSDK
+                    requestBillingAgreement: true,
+                    enableShippingAddress: true,
+                    shippingAddressEditable: true,
+                });
+            },
+
+            onApprove: function (data, actions) {
+                console.log('onApprove', data, actions, paypalCheckoutInstance)
+                return paypalCheckoutInstance.tokenizePayment(data).then(function (payload) {
+                    // Submit `payload.nonce` to your server
+                    console.log('Payment Tokenize Successful', payload);
+                });
+            },
+
+            onError: function(data, actions) {
+
+                var li = document.createElement('li');
+                li.innerText= 'onError :: ' + data;
+                document.querySelector('#display-messages ul').appendChild(li);
+            },
+            onCancel: function(data, actions) {
+
+                var li = document.createElement('li');
+                li.innerText= 'onCancel :: ' + JSON.stringify(data);
+                document.querySelector('#display-messages ul').appendChild(li);
+            }
+        }).render('#paypal-button');
+    }).then(function () {
+        // The PayPal button will be rendered in an html element with the ID
+        // `paypal-button`. This function will be called when the PayPal button
+        // is set up and ready to be used
+    });
+</script>
+</body>
+</html>
