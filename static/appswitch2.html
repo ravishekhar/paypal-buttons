@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Add meta tags for mobile and IE -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <title> PayPal Checkout Integration | Server Demo </title>
+</head>
+
+<body>
+<h1>App Switch Using Pre Created OrderID</h1>
+<!-- Set up a container element for the button -->
+
+
+<!-- Include the PayPal JavaScript SDK -->
+<script src="https://www.paypal.com/sdk/js?client-id=test&currency=USD"></script>
+
+<h2>
+    Enter Order ID
+</h2>
+<input type="text" id="orderID" placeholder="Enter Order ID" value="0E536001A1656600E"/>
+<p>
+    <button id="testBtn">
+        Try App Switch directly using above OrderID
+    </button>
+</p>
+<div id="paypal-button-container"></div>
+<script>
+    document.getElementById("testBtn").addEventListener("click", function () {
+        location.href = `https://www.paypal.com/app-switch-checkout?token=${document.getElementById("orderID").value}&tokenType=ORDER_ID&buttonSessionID=uid_31620a39fc_mtg6ntu6mji&integration_type=web_sdk`
+    });
+
+    // Render the PayPal button into #paypal-button-container
+    paypal.Buttons({
+
+        appSwitchWhenAvailable: true,
+
+        // Call your server to set up the transaction
+        createOrder: function (data, actions) {
+            return document.getElementById("orderID").value;
+        },
+
+        // Call your server to finalize the transaction
+        onApprove: function (data, actions) {
+
+        }
+
+    }).render('#paypal-button-container');
+</script>
+</body>
+
+</html>
+    
