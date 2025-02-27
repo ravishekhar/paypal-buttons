@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Add meta tags for mobile and IE -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <title> PayPal Checkout Integration | Server Demo </title>
+</head>
+
+<body>
+<h1>App Switch Using Pre Created OrderID</h1>
+<!-- Set up a container element for the button -->
+
+
+<!-- Include the PayPal JavaScript SDK -->
+<script src="https://www.paypal.com/sdk/js?client-id=AeRhxLMV6K9YksOG0Pw-eFZUpIHa2VJr-eiqjr8pWJNztbQ6rf8b0z__uvW3FSw6CqMjvgAwgFOCdv8a&currency=USD"></script>
+
+<h2>
+    Enter Email
+</h2>
+<p>
+    <input type="email" id="email" placeholder="Enter Buyer Email MPE"/>
+</p>
+<div id="paypal-button-container"></div>
+<script>
+
+    // Render the PayPal button into #paypal-button-container
+    paypal.Buttons({
+
+        appSwitchWhenAvailable: true,
+
+        // Call your server to set up the transaction
+        createOrder: function (data, actions) {
+            return actions.order.create({
+                "intent": "CAPTURE",
+                "purchase_units": [
+                    {
+                        "reference_id": "PUHF",
+                        "amount": {
+                            "currency_code": "USD",
+                            "value": "1.00",
+                            "breakdown": {
+                                "item_total": {
+                                    "value": "1.00",
+                                    "currency_code": "USD"
+                                }
+                            }
+                        },
+                        "items": []
+                    }
+                ],
+                "payment_source": {
+                    "paypal": {
+                        "email_address": document.getElementById("email").value,
+                        "experience_context": {
+                            "return_url": "https://ravishekhar.github.io/paypal-buttons/static/appswitch-live.html",
+                            "cancel_url": "https://ravishekhar.github.io/paypal-buttons/static/appswitch-live.html",
+                            "shipping_preference": "GET_FROM_FILE"
+                        }
+                    }
+                }
+            })
+        },
+
+        // Call your server to finalize the transaction
+        onApprove: function (data, actions) {
+
+        }
+
+    }).render('#paypal-button-container');
+</script>
+</body>
+
+</html>
+    
