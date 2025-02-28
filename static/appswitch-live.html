@@ -6,15 +6,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <title> PayPal Checkout Integration | Server Demo </title>
+    <style>
+
+        .display-messages {
+            border: 1px solid orange;
+            background: lightgoldenrodyellow;
+            margin: 10px;
+        }
+    </style>
 </head>
 
 <body>
-<h1>App Switch flow in Prod</h1>
+<h1>App Switch Using Pre Created OrderID</h1>
 <!-- Set up a container element for the button -->
 
 
 <!-- Include the PayPal JavaScript SDK -->
 <script src="https://www.paypal.com/sdk/js?client-id=AeRhxLMV6K9YksOG0Pw-eFZUpIHa2VJr-eiqjr8pWJNztbQ6rf8b0z__uvW3FSw6CqMjvgAwgFOCdv8a&currency=USD"></script>
+<div id="display-messages" class="display-messages">
+    <ul>
+        <li>Message Section</li>
+    </ul>
+</div>
 
 <h2>
     Enter Email
@@ -24,9 +37,14 @@
 </p>
 <div id="paypal-button-container"></div>
 <script>
+    function showMessage(text) {
+        var li = document.createElement('li');
+        li.innerText= text;
+        document.querySelector('#display-messages ul').appendChild(li);
+    }
 
     // Render the PayPal button into #paypal-button-container
-    paypal.Buttons({
+    const buttons = paypal.Buttons({
 
         appSwitchWhenAvailable: true,
 
@@ -65,10 +83,23 @@
 
         // Call your server to finalize the transaction
         onApprove: function (data, actions) {
+            showMessage("SPB onApprove: "+JSON.stringify(data))
+        },
 
+        onCancel: function (data, actions) {
+            showMessage("SPB onCancel: "+JSON.stringify(data))
+        },
+        onError: function (data, actions) {
+            showMessage("SPB onError: "+JSON.stringify(data))
         }
 
-    }).render('#paypal-button-container');
+    });
+    if(buttons.hasReturned()) {
+        showMessage("Running in context of Resume flow. Buttons will not be rendered in resume flow by default.")
+        buttons.resume();
+    }else {
+        buttons.render('#paypal-button-container');
+    }
 </script>
 </body>
 
