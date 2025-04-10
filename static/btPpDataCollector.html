@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <!--load the needed scripts -->
+    <!-- Load the client component. -->
+    <script src="https://js.braintreegateway.com/web/3.90.0/js/client.min.js"></script>
+
+    <!-- Load the PayPal Checkout component. -->
+    <script src="https://js.braintreegateway.com/web/3.90.0/js/paypal-checkout.min.js"></script>
+    <!-- This is to load the data collector -->
+    <script src="https://js.braintreegateway.com/web/3.90.0/js/data-collector.min.js"></script>
+</head>
+<body>
+
+<h1>Braintree - Sandbox</h1>
+
+<style>
+    button {
+        height: 40px;
+        width: 128px;
+        margin: 2px;
+        border-radius: 4px
+    }
+
+    .side {
+        display: inline-block;
+    }
+
+    .display-messages {
+        border: 1px solid orange;
+        background: lightgoldenrodyellow;
+        margin: 10px;
+    }
+</style>
+
+<div id="display-messages" class="display-messages">
+    <ul>
+        <li>Messages goes here</li>
+    </ul>
+
+</div>
+
+<div id="paypal-button"></div>
+
+<script>
+    // Create a client.
+    braintree.client.create({
+        authorization: 'sandbox_4xtf4gm6_w3438mkfkwh5vfm6'
+    }, function (clientErr, clientInstance) {
+
+        // Stop if there was a problem creating the client.
+        // This could happen if there is a network error or if the authorization
+        // is invalid.
+        if (clientErr) {
+            console.error('Error creating client:', clientErr);
+            return;
+        }
+
+        // Create a PayPal Checkout component.
+        braintree.paypalCheckout.create({
+            client: clientInstance
+        }, function (paypalCheckoutErr, paypalCheckoutInstance) {
+
+            // Stop if there was a problem creating PayPal Checkout.
+            // This could happen if there was a network error or if it's incorrectly
+            // configured.
+            if (paypalCheckoutErr) {
+                console.error('Error creating PayPal Checkout:', paypalCheckoutErr);
+                return;
+            }
+
+            // this is to load the data collector
+            braintree.dataCollector.create({
+                client: clientInstance,
+                paypal: true
+            }, function (err, dataCollectorInstance) {
+                if (err) {
+                    // Handle error
+                    dataCollectorInstance.teardown();
+                    return;
+                }
+                // At this point, you should access the
+                //dataCollectorInstance.deviceData value and provide it
+                // to your server, e.g. by injecting it into your form as hidden input
+                myDeviceData = dataCollectorInstance.deviceData;
+                console.log("The device data is " + JSON.stringify(myDeviceData));
+            });
+
+            // Load the PayPal JS SDK (see Load the PayPal JS SDK section)
+
+            paypalCheckoutInstance.loadPayPalSDK({
+                intent: 'capture',
+                currency: 'USD',
+                commit: true,
+                vault: true
+
+            }, function (loadSDKErr) {
+                // The PayPal script is now loaded on the page and
+                // window.paypal.Buttons is now available to use
+
+                // render the PayPal button
+                // With the PayPal JS SDK
+                paypal.Buttons({
+
+                    style: {
+                        branding: true, // optional
+                        layout: 'vertical',
+                        size: 'medium', // small | medium | large | responsive
+                        shape: 'rect',   // pill | rect
+                        color: 'gold'   // gold | blue | silve | black
+
+                    },
+                    fundingSource: paypal.FUNDING.PAYPAL,
+                    createBillingAgreement: function () {
+                        return paypalCheckoutInstance.createPayment({
+                            flow: 'vault',
+                            amount: '83.00',
+                            currency: 'USD', // Make sure this matches the currency passed into loadPayPalSDK
+                            intent: 'capture', // Make sure this matches the intent passed into loadPayPalSDK
+                            displayName: 'GoFundMe',// this is your brand name to enable seemless integration
+                            billingAgreementDescription: 'This is the place holder for the Billing Text'
+
+                        });
+                    },
+
+                    onApprove: function (data, actions) {
+
+                        return paypalCheckoutInstance.tokenizePayment(data, function
+                            (err, payload) {
+
+                            // if the error is 2074, then restart the payment instrument
+                            if (data.ResponseCode == "2074") {
+                                // restarting PayPal flow after an instrument decline
+                                actions.restart();
+                            }
+                            console.log(JSON.stringify(data));
+                            console.log(JSON.stringify(payload));
+                            console.log("The payment nonce is " + payload.nonce);
+                            // Send payload.nonce to your server
+                        });
+                    },
+
+                    onCancel: function () {
+                        // handle case where user cancels
+                    },
+
+                    onError: function (err) {
+                        // handle case where error occurs
+                        console.log("Error loading PayPal Checkout Button and the err is " + err);
+                    }
+
+                }).render('#paypal-button').then(function () {
+                    // The PayPal button will be rendered in an html element with the ID
+                    // `paypal-button`. This function will be called when the PayPal button
+                    // is set up and ready to be used
+                    console.log("The paypal checkout button is enabled");
+                });
+            }); // till here load paypal sdk
+        }); //till here the create checkout component
+    })
+
+</script>
+</body>
+</html>
