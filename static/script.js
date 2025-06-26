@@ -31,6 +31,14 @@ export function renderButtons({showShippingChange, redirectOnApproval} = {}) {
                             },
                         },
                     ],
+                    payment_source: {
+                        paypal: {
+                            experience_context: {
+                                return_url: window.location.href,
+                                cancel_url: window.location.href
+                            }
+                        }
+                    }
                 })
                 .then((orderID) => {
                     console.log({orderID});
