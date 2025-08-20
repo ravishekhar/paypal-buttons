@@ -19,7 +19,7 @@ export function renderButtons({showShippingChange, redirectOnApproval} = {}) {
         onError(err) {
             console.error("buttons onError() callback", err);
         },
-        appSwitchWhenAvailable: true,
+        
 
         createOrder(data, actions) {
             return actions.order
